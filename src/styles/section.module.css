@@ -1,0 +1,39 @@
+/* ============================================================================
+   SHARED SECTION UTILITIES
+   ============================================================================
+
+   Common layout patterns used across all major sections (Hero, Services,
+   Mission, WhySection). These utilities provide consistent spacing,
+   typography, and structure.
+
+   ============================================================================ */
+
+.inner {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 1.8rem;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.8rem;
+  color: var(--accent-1);
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  max-width: 36rem;
+  font-size: 0.95rem;
+}

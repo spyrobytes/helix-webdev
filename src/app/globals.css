@@ -1,33 +1,31 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================================
+   HELIXBYTES - GLOBAL STYLES
+   ============================================================================ */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@import '../styles/variables.css';
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+/* ============================================================================
+   GLOBAL RESETS & BASE STYLES
+   ============================================================================ */
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: radial-gradient(circle at top, #1e293b 0, #020617 45%, #000 100%);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 a {
@@ -35,8 +33,43 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+/* ============================================================================
+   MAIN CONTENT CONTAINER
+   ============================================================================ */
+
+main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 4.5rem 0 3rem;
+}
+
+/* ============================================================================
+   REDUCED MOTION SUPPORT
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================================
+   NOTE: Component-specific styles are in CSS Modules
+   ============================================================================
+
+   Component styles are located in their respective .module.css files.
+   This global stylesheet contains only root variables, resets, and base styles.
+
+   ============================================================================ */

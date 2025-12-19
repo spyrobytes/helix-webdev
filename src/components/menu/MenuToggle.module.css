@@ -1,0 +1,87 @@
+.toggle {
+  position: relative;
+  z-index: var(--z-menu-toggle);
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  border: none;
+  background: rgba(15, 23, 42, 0.95);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.4);
+  transition: all 0.3s ease;
+}
+
+.toggle:hover {
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 0 0 1px var(--accent-1), 0 0 18px rgba(56, 189, 248, 0.6);
+}
+
+.toggleOpen {
+  box-shadow: 0 0 0 1px var(--accent-2), 0 0 20px rgba(168, 85, 247, 0.6);
+}
+
+.toggle:focus {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Breathing pulse animation when menu is idle (not open) */
+.toggle::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--accent-1), transparent 70%);
+  opacity: 0;
+  animation: togglePulse 3s ease-in-out infinite;
+}
+
+.toggleOpen::before {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes togglePulse {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.15;
+    transform: scale(1.15);
+  }
+}
+
+/* Hamburger Icon - Three-line SVG with springy transitions */
+.icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.iconLine {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    opacity 0.3s ease, stroke 0.25s ease;
+  transform-origin: 50% 50%;
+}
+
+/* Icon animation: hamburger → X when open */
+.iconLineTopOpen {
+  transform: translateY(20px) rotate(45deg);
+}
+
+.iconLineMiddleOpen {
+  opacity: 0;
+}
+
+.iconLineBottomOpen {
+  transform: translateY(-20px) rotate(-45deg);
+}

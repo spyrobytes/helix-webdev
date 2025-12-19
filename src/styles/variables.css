@@ -1,0 +1,40 @@
+/* ============================================================================
+   ROOT VARIABLES & DESIGN TOKENS
+   ============================================================================ */
+
+:root {
+    /* Color Palette */
+    --bg-gradient-1: #050816;
+    --bg-gradient-2: #0f172a;
+    --accent-1: #38bdf8;
+    --accent-2: #a855f7;
+    --accent-3: #22c55e;
+    --accent-4: #f97316;
+    --accent-5: #ec4899;
+    --accent-6: #3b82f6;
+    --text-main: #f9fafb;
+    --text-muted: #9ca3af;
+    --card-bg: rgba(15, 23, 42, 0.85);
+    --border-subtle: rgba(148, 163, 184, 0.3);
+
+    /* Brand Colors */
+    --brand-helix: #f755f5;
+    --brand-bytes: #22c55e;
+    --brand-tagline: #00f5ff;
+
+    /* Layout */
+    --max-width: 1200px;
+    --cards-overshoot: 4rem;
+
+    /* Z-Index System - Layered stacking context
+       Base rule: Keep gaps of 10 between layers for future insertions */
+    --z-background: -10;           /* Fixed background elements */
+    --z-background-overlay: -5;     /* Background noise/patterns */
+    --z-content: 1;                 /* Default content layer */
+    --z-header: 100;                /* Sticky header */
+    --z-menu-base: 1000;            /* Menu container base */
+    --z-menu-bg: 1000;              /* Menu SVG background */
+    --z-menu-panel: 1001;           /* Menu overlay panel */
+    --z-menu-cta: 1001;             /* Nav CTA (same layer as panel) */
+    --z-menu-toggle: 1002;          /* Menu toggle button (highest) */
+}

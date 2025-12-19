@@ -1,0 +1,91 @@
+.panel {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-menu-panel);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+
+  opacity: 0;
+  pointer-events: none;
+
+  /* Initial state: slightly elevated and scaled down */
+  transform: translateY(-20px) scale(0.94);
+
+  /* Springy entrance animation */
+  transition: opacity 0.45s ease-out,
+    transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.panelOpen {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* Semi-transparent backdrop with blur for depth and readability */
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top,
+    rgba(15, 23, 42, 0.32),
+    #020617
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mix-blend-mode: normal;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: auto;
+  text-align: center;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.item {
+  margin: 0.75rem 0;
+}
+
+/* Staggered item entrance animation */
+.itemOpen {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: itemIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.itemOpen:nth-child(1) {
+  animation-delay: 0.12s;
+}
+.itemOpen:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.itemOpen:nth-child(3) {
+  animation-delay: 0.24s;
+}
+.itemOpen:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.itemOpen:nth-child(5) {
+  animation-delay: 0.36s;
+}
+
+@keyframes itemIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design - mobile adjustments */
+@media (max-width: 639px) {
+  .panel {
+    align-items: flex-start;
+    padding-top: 5rem;
+  }
+}

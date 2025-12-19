@@ -1,0 +1,382 @@
+.visual {
+  position: relative;
+  min-height: 360px;
+  width: 100%;
+  perspective: 1000px;
+  --rotate-x: 0deg;
+  --rotate-y: 0deg;
+}
+
+.cloudBackdrop {
+  position: absolute;
+  inset: -10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  pointer-events: none;
+  animation:
+    cloudDrift 30s ease-in-out infinite,
+    float 6s ease-in-out infinite;
+}
+
+.cloud {
+  width: 120%;
+  height: auto;
+  opacity: 0.12;
+  filter: blur(2px);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes cloudDrift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-5%, 3%);
+  }
+  66% {
+    transform: translate(5%, -3%);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+  }
+  50% {
+    opacity: 0.85;
+    text-shadow: 0 0 20px rgba(56, 189, 248, 0.9);
+  }
+}
+
+.core {
+  position: absolute;
+  inset: 12%;
+  z-index: 1;
+  border-radius: 32px;
+  background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), rgba(15, 23, 42, 0.75));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 25px 60px rgba(15, 23, 42, 0.9),
+    0 0 0 1px rgba(148, 163, 184, 0.1) inset;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rotate-x)) rotateY(var(--rotate-y));
+  transition: transform 0.3s ease-out;
+  will-change: transform;
+}
+
+/* Animated gradient border effect */
+.core::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 32px;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-1));
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Tablet breakpoint - maintain good spacing */
+@media (max-width: 900px) {
+  .visual {
+    min-height: 380px;
+  }
+
+  .core {
+    inset: 10%;
+    padding: 1.15rem;
+  }
+}
+
+/* Ensure rotating phrase area has adequate space on smaller screens */
+@media (max-width: 768px) {
+  .visual {
+    min-height: 400px;
+  }
+
+  .core {
+    inset: 9%;
+    padding: 1.1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .visual {
+    min-height: 420px;
+  }
+
+  .core {
+    inset: 8%;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .visual {
+    min-height: 440px;
+  }
+
+  .core {
+    inset: 7%;
+    padding: 0.9rem;
+  }
+}
+
+.coreHeader {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+  flex-shrink: 0;
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.21em;
+  font-size: 0.7rem;
+}
+
+.badge {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+
+.coreMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.coreTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.coreTitle span {
+  color: var(--accent-1);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.metrics {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.metrics div {
+  flex: 1;
+  min-width: 0;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.metrics div:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.metrics div:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.metrics div:nth-child(3) {
+  animation-delay: 0.7s;
+}
+
+.metrics div strong {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  margin-bottom: 0.15rem;
+}
+
+.coreFooter {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.coreFooter > span:last-child {
+  flex: 1;
+  text-align: right;
+  min-width: 0;
+}
+
+.pill {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.9);
+  font-size: 0.68rem;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Responsive adjustments for better text sizing */
+@media (max-width: 900px) {
+  .label {
+    font-size: 0.65rem;
+  }
+
+  .badge {
+    font-size: 0.6rem;
+    padding: 0.12rem 0.5rem;
+  }
+
+  .coreTitle {
+    font-size: 0.85rem;
+  }
+
+  .metrics {
+    font-size: 0.68rem;
+    margin-top: 0.65rem;
+  }
+
+  .metrics div strong {
+    font-size: 0.82rem;
+  }
+
+  .coreFooter {
+    font-size: 0.68rem;
+    margin-top: 0.65rem;
+  }
+
+  .pill {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .metrics {
+    margin-top: 0.55rem;
+  }
+
+  .coreFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.55rem;
+  }
+
+  .coreFooter > span:last-child {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics {
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .metrics div strong {
+    font-size: 0.78rem;
+  }
+
+  .coreFooter {
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .pill {
+    font-size: 0.62rem;
+    padding: 0.2rem 0.6rem;
+  }
+}
+
+/* Accessibility: Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .cloudBackdrop {
+    animation: none;
+  }
+
+  .core {
+    animation: none;
+  }
+
+  .core::before {
+    animation: none;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  }
+
+  .coreTitle span {
+    animation: none;
+  }
+
+  .metrics div {
+    opacity: 1;
+    animation: none;
+  }
+}

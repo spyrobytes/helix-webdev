@@ -1,0 +1,36 @@
+.link {
+  display: inline-block;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -0.4rem;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  transform: translateX(-50%);
+  transition: width 0.25s ease;
+}
+
+.link:hover {
+  transform: translateY(-2px);
+  color: var(--accent-1);
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.5),
+    0 0 40px rgba(56, 189, 248, 0.3);
+  filter: brightness(1.2);
+}
+
+.link:hover::after {
+  width: 60%;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+}

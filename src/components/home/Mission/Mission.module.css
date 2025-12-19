@@ -1,0 +1,255 @@
+/* ============================================================================
+   MISSION SECTION - ANIMATED STYLES
+   ============================================================================ */
+
+.section {
+  align-items: center;
+  margin-top: 8rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Responsive margin adjustments to maintain proper spacing */
+@media (max-width: 767px) {
+  .section {
+    margin-top: 4rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .section {
+    margin-top: 6rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .layout {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+/* Header fade-in animation */
+.headerAnimate {
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ============================================================================
+   MISSION ITEMS (LEFT BLOCK)
+   ============================================================================ */
+
+.block {
+  background: var(--card-bg);
+  border-radius: 1.3rem;
+  padding: 1.5rem 1.3rem;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.9);
+  font-size: 0.93rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.block:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 25px 70px rgba(15, 23, 42, 0.95),
+    0 0 40px rgba(168, 85, 247, 0.15);
+}
+
+.block strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.list {
+  margin-top: 1rem;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+
+/* Mission item container */
+.listItem {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+/* Staggered fade-in animation */
+.listItem.itemAnimate {
+  animation: slideInFromLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Hover state for list items */
+.listItem:hover {
+  background: rgba(56, 189, 248, 0.05);
+  transform: translateX(4px);
+  border-radius: 0.75rem;
+}
+
+.listItem:hover .missionIcon {
+  color: var(--accent-2);
+  transform: scale(1.1);
+}
+
+.listItem:hover .progressCircle {
+  transform: scale(1.05);
+}
+
+/* Item header (progress circle + icon) */
+.itemHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.progressCircle {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.missionIcon {
+  width: 32px;
+  height: 32px;
+  color: var(--accent-1);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.itemContent {
+  flex: 1;
+  padding-top: 0.5rem;
+}
+
+/* ============================================================================
+   MISSION POINTS (RIGHT CARDS)
+   ============================================================================ */
+
+.points {
+  display: grid;
+  gap: 0.8rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.pointCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  padding: 1.2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Glassmorphism effect */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.08), rgba(15, 23, 42, 0.85));
+}
+
+/* Staggered fade-in animation */
+.pointCard.pointAnimate {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Hover state for point cards */
+.pointCard:hover {
+  transform: translateY(-6px);
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.9),
+    0 0 30px rgba(168, 85, 247, 0.2);
+  background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.12), rgba(15, 23, 42, 0.9));
+}
+
+.pointCard h4 {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+  transition: color 0.3s ease;
+}
+
+.pointCard:hover h4 {
+  color: var(--accent-2);
+}
+
+/* ============================================================================
+   KEYFRAME ANIMATIONS
+   ============================================================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes drawIn {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION SUPPORT
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .block,
+  .listItem,
+  .pointCard,
+  .missionIcon,
+  .progressCircle {
+    transition: none;
+    animation: none !important;
+  }
+
+  .listItem,
+  .pointCard,
+  .headerAnimate {
+    opacity: 1;
+    transform: none;
+  }
+
+  .block:hover,
+  .listItem:hover,
+  .pointCard:hover {
+    transform: none;
+  }
+
+  .missionIcon path {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}

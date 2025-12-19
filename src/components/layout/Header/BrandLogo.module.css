@@ -1,0 +1,48 @@
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.helix {
+  color: var(--brand-helix);
+  text-shadow: 0 0 12px rgba(247, 85, 245, 0.4);
+}
+
+.bytes {
+  color: var(--brand-bytes);
+  text-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+.tagline {
+  font-size: 0.7rem;
+  color: var(--brand-tagline);
+  opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 639px) {
+  .text {
+    display: none;
+  }
+}

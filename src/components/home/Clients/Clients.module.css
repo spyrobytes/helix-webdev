@@ -1,0 +1,200 @@
+/* ============================================================================
+   CLIENTS SECTION - GLASSMORPHISM BADGES
+   ============================================================================ */
+
+.section {
+  align-items: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.header {
+  text-align: center;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Header fade-in animation */
+.headerAnimate {
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ============================================================================
+   BADGE GRID
+   ============================================================================ */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* ============================================================================
+   CLIENT BADGE STYLING
+   ============================================================================ */
+
+.badge {
+  --badge-accent: var(--accent-1);
+
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.5rem 1.3rem;
+  border-radius: 1rem;
+
+  /* Glassmorphism */
+  background: radial-gradient(
+    circle at top left,
+    rgba(var(--badge-accent-rgb, 56, 189, 248), 0.08),
+    rgba(15, 23, 42, 0.85)
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.6);
+
+  /* Animation setup */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  cursor: default;
+}
+
+/* Staggered fade-in animation */
+.badge.animate {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Hover state */
+.badge:hover {
+  transform: translateY(-6px);
+  border-color: var(--badge-accent);
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.8),
+    0 0 40px rgba(var(--badge-accent-rgb, 56, 189, 248), 0.2);
+}
+
+.badge:hover svg {
+  transform: scale(1.1) rotate(5deg);
+  color: var(--badge-accent);
+}
+
+/* ============================================================================
+   BADGE ICON
+   ============================================================================ */
+
+.badge svg {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: var(--badge-accent);
+  filter: drop-shadow(0 0 8px rgba(var(--badge-accent-rgb, 56, 189, 248), 0.4));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   BADGE TEXT CONTENT
+   ============================================================================ */
+
+.badgeContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.badgeLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.badge:hover .badgeLabel {
+  color: var(--badge-accent);
+}
+
+.badgeDescription {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+/* ============================================================================
+   ACCENT COLOR OVERRIDES (via CSS custom properties)
+   ============================================================================ */
+
+.badge:nth-child(1) {
+  --badge-accent-rgb: 34, 197, 94; /* Green */
+}
+
+.badge:nth-child(2) {
+  --badge-accent-rgb: 59, 130, 246; /* Blue */
+}
+
+.badge:nth-child(3) {
+  --badge-accent-rgb: 168, 85, 247; /* Purple */
+}
+
+.badge:nth-child(4) {
+  --badge-accent-rgb: 56, 189, 248; /* Cyan */
+}
+
+/* ============================================================================
+   KEYFRAME ANIMATIONS
+   ============================================================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION SUPPORT
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .badge,
+  .headerAnimate {
+    animation: none !important;
+    transition: none;
+  }
+
+  .badge {
+    opacity: 1;
+    transform: none;
+  }
+
+  .badge:hover {
+    transform: none;
+  }
+
+  .badge:hover svg {
+    transform: none;
+  }
+}

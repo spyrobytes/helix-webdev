@@ -1,0 +1,201 @@
+/* ============================================================================
+   SERVICES SECTION - SCROLL-TRIGGERED ANIMATED CARDS
+
+   Structure:
+   - .section: Extended height container for scroll animation
+   - .servicesHeader: Solid background header that scrolls over stacked cards
+   - .cardContainer: Sticky container for card deck
+   - .cardDeck: Holds all animated cards
+   ============================================================================ */
+
+.section {
+  min-height: 340vh;
+  padding: 0;
+  position: relative;
+  scroll-margin-top: 80px;
+  flex-direction: column;
+  /* Reserve space *inside* the section's layout box */
+  padding-bottom: var(--cards-overshoot);
+}
+
+/* ============================================================================
+   SERVICES HEADER
+
+   Key: Has solid background so it covers the stacked cards as you scroll.
+   The header scrolls away to reveal the cards underneath.
+   ============================================================================ */
+
+.servicesHeader {
+  text-align: center;
+  padding: 6rem 1.5rem 4rem;
+  padding-top: calc(6rem + 80px); /* Account for nav height */
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(to bottom, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+  /* Full viewport width breakout */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+.sectionTag {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--accent-2);
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+/* ============================================================================
+   CARD CONTAINER & DECK
+   ============================================================================ */
+
+.cardContainer {
+  position: sticky;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  min-height: calc(100vh - 100px);
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1500px;
+  padding: 1rem;
+}
+
+.cardDeck {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 500px;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Screen reader only */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================================================
+   RESPONSIVE LAYOUTS
+   ============================================================================ */
+
+/* Mobile: Static grid layout, no scroll animation */
+@media (max-width: 767px) {
+  .section {
+    min-height: auto;
+    padding-bottom: 3rem;
+  }
+
+  .servicesHeader {
+    padding: 4rem 1rem 2rem;
+    padding-top: calc(4rem + 60px);
+  }
+
+  .cardContainer {
+    position: relative;
+    top: 0;
+    min-height: auto;
+    height: auto;
+    padding: 2rem 1rem;
+    perspective: none;
+  }
+
+  .cardDeck {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    justify-items: center;
+    align-items: stretch;
+  }
+
+  .cardDeck:global(.layoutStatic) {
+    display: grid;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .servicesHeader {
+    padding: 6rem 1.5rem 4rem;
+    padding-top: calc(6rem + 90px);
+  }
+
+  .cardContainer {
+    perspective: 2000px;
+    min-height: calc(100vh - 80px);
+    top: 100px;
+    padding-top: 0;
+    padding-bottom: 2rem;
+    align-items: flex-start;
+    overflow: visible;
+  }
+
+  .cardDeck {
+    min-height: 800px;
+    overflow: visible;
+    margin-top: 20px;
+  }
+
+  .section {
+    min-height: 450vh;
+    overflow: visible;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .servicesHeader {
+    padding-top: calc(6rem + 80px);
+  }
+
+  .section {
+    min-height: 350vh;
+    overflow: visible;
+  }
+
+  .cardContainer {
+    min-height: calc(100vh - 140px);
+    top: 120px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    align-items: center;
+  }
+
+  .cardDeck {
+    min-height: 600px;
+    margin-top: 0;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1400px) {
+  .cardContainer {
+    max-height: 950px;
+  }
+}

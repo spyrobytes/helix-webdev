@@ -1,0 +1,551 @@
+/* ========================================
+   FOOTER - DESIGN SYSTEM ALIGNED
+   Enhanced with animations, glassmorphism, and landing page aesthetic
+   ======================================== */
+
+.footer {
+  position: relative;
+  margin-top: 4rem;
+  padding: 4rem 1.5rem 2rem;
+  background: radial-gradient(
+    circle at top left,
+    rgba(15, 23, 42, 0.95) 0%,
+    var(--bg-gradient-1) 55%,
+    rgba(5, 8, 22, 1) 100%
+  );
+  color: var(--text-main);
+  border-top: 1px solid var(--border-subtle);
+  overflow: hidden;
+}
+
+/* Override section min-height for footer */
+.footer section {
+  min-height: auto;
+}
+
+/* Subtle glow accent overlay */
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(circle at 10% -10%, rgba(168, 85, 247, 0.15), transparent 60%),
+    radial-gradient(circle at 120% 50%, rgba(56, 189, 248, 0.12), transparent 55%);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footerInner {
+  position: relative;
+  z-index: 1;
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) repeat(3, minmax(0, 1.4fr));
+  gap: 2.5rem;
+}
+
+/* ========================================
+   SCROLL-TRIGGERED ANIMATIONS
+   ======================================== */
+.brandSection,
+.linksSection,
+.contactSection,
+.socialSection,
+.bottomBar {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.brandVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.linksVisible {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+.contactVisible {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.socialVisible {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.3s;
+}
+
+.bottomBarVisible {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}
+
+/* ========================================
+   BRAND SECTION
+   ======================================== */
+.brandSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1.2rem;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  border-radius: 1.2rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient border on brand section */
+.brandSection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.2rem;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--accent-2),
+    var(--accent-1),
+    var(--accent-3),
+    var(--accent-4)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.2;
+  animation: rotateGradient 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotateGradient {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.brandName {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+/* Colored brand name matching header */
+.helix {
+  color: var(--brand-helix);
+  text-shadow: 0 0 10px rgba(247, 85, 245, 0.5);
+}
+
+.bytes {
+  color: var(--brand-bytes);
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+.tagline {
+  margin: 0;
+  font-size: 0.88rem;
+  background-image: linear-gradient(
+    120deg,
+    var(--accent-1),
+    var(--accent-2),
+    var(--accent-3)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 500;
+}
+
+.description {
+  margin: 0;
+  margin-top: 0.3rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: rgba(226, 232, 240, 0.85);
+}
+
+/* ========================================
+   COLUMN TITLES
+   ======================================== */
+.columnTitle {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  color: var(--accent-1);
+}
+
+/* ========================================
+   LINKS SECTION
+   ======================================== */
+.linksSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: rgba(241, 245, 249, 0.85);
+  text-decoration: none;
+  transition:
+    color 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: fit-content;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.12rem;
+  width: 100%;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent-1));
+  transition: transform 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.navLink:hover,
+.navLink:focus-visible {
+  color: var(--text-main);
+  transform: translateX(4px);
+}
+
+.navLink:hover::after,
+.navLink:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ========================================
+   CONTACT SECTION
+   ======================================== */
+.contactSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.address {
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.emailLink {
+  font-size: 0.9rem;
+  color: rgba(241, 245, 249, 0.9);
+  text-decoration: none;
+  transition:
+    color 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    text-shadow 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: fit-content;
+}
+
+.emailLink:hover,
+.emailLink:focus-visible {
+  color: var(--text-main);
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+}
+
+.hours {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ========================================
+   CTA BUTTON
+   ======================================== */
+.ctaButton {
+  margin-top: 0.8rem;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(168, 85, 247, 0.6);
+  background: radial-gradient(
+    circle at 0 0,
+    rgba(168, 85, 247, 0.25),
+    rgba(15, 23, 42, 0.9)
+  );
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-main);
+  text-decoration: none;
+  box-shadow:
+    0 0 15px rgba(168, 85, 247, 0.4),
+    0 12px 28px rgba(0, 0, 0, 0.6);
+  transition:
+    transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    background 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.ctaButton:hover,
+.ctaButton:focus-visible {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 20px rgba(168, 85, 247, 0.8),
+    0 16px 36px rgba(0, 0, 0, 0.8);
+  border-color: rgba(56, 189, 248, 0.7);
+  background: radial-gradient(
+    circle at 0 0,
+    rgba(56, 189, 248, 0.3),
+    rgba(15, 23, 42, 0.95)
+  );
+}
+
+.ctaArrow {
+  font-size: 1rem;
+  transform: translateX(0);
+  transition: transform 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.ctaButton:hover .ctaArrow,
+.ctaButton:focus-visible .ctaArrow {
+  transform: translateX(3px);
+}
+
+/* ========================================
+   SOCIAL SECTION
+   ======================================== */
+.socialSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.socialList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+/* Social Pill with Hover Reveal Effect */
+.socialPill {
+  --dot-accent: var(--accent-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  text-decoration: none;
+  font-size: 0.85rem;
+  color: rgba(226, 232, 240, 0.9);
+  width: fit-content;
+  overflow: hidden;
+  transition:
+    transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    background 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    padding 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.socialPill:hover,
+.socialPill:focus-visible {
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.85);
+  border-color: var(--dot-accent);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.9),
+              0 0 16px var(--dot-accent);
+  padding: 0.5rem 1rem 0.5rem 0.5rem;
+}
+
+.socialDot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: var(--dot-accent);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px var(--dot-accent);
+  transition: transform 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.socialPill:hover .socialDot,
+.socialPill:focus-visible .socialDot {
+  transform: scale(1.15);
+}
+
+/* Label reveal animation */
+.socialLabel {
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-8px);
+  max-width: 0;
+  overflow: hidden;
+  transition:
+    opacity 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    max-width 240ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.socialPill:hover .socialLabel,
+.socialPill:focus-visible .socialLabel {
+  opacity: 1;
+  transform: translateX(0);
+  max-width: 100px;
+}
+
+/* ========================================
+   BOTTOM BAR
+   ======================================== */
+.bottomBar {
+  position: relative;
+  z-index: 1;
+  max-width: 1120px;
+  margin: 2.5rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.copyright {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.bottomLinks {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.bottomLink {
+  color: rgba(203, 213, 225, 0.9);
+  text-decoration: none;
+  transition: color 160ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.bottomLink:hover,
+.bottomLink:focus-visible {
+  color: var(--text-main);
+}
+
+.bottomSeparator {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+/* ========================================
+   RESPONSIVE LAYOUT
+   ======================================== */
+@media (max-width: 960px) {
+  .footerInner {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
+    row-gap: 2rem;
+  }
+
+  .socialList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .footer {
+    padding-inline: 1.25rem;
+    padding-top: 3rem;
+  }
+
+  .footerInner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bottomBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .brandSection {
+    padding: 1rem;
+    gap: 0.6rem;
+  }
+
+  .brandName {
+    font-size: 0.85rem;
+  }
+
+  .tagline {
+    font-size: 0.8rem;
+  }
+
+  .description {
+    font-size: 0.82rem;
+    margin-top: 0.2rem;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .brandSection,
+  .linksSection,
+  .contactSection,
+  .socialSection,
+  .bottomBar {
+    transition-duration: 0.01ms;
+  }
+
+  .brandSection::before {
+    animation: none;
+  }
+
+  .navLink,
+  .emailLink,
+  .ctaButton,
+  .socialPill,
+  .bottomLink {
+    transition-duration: 0.01ms;
+  }
+
+  .socialLabel {
+    transition-duration: 0.01ms;
+  }
+}

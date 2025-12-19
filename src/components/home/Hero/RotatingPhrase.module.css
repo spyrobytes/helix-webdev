@@ -1,0 +1,57 @@
+.wrapper {
+  margin-top: 0.2rem;
+  min-height: 1.4em;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.phrase {
+  /* Responsive font-size that scales down on smaller viewports */
+  font-size: clamp(0.68rem, 1.1vw, 0.85rem);
+  color: var(--accent-3);
+  transform: translateY(100%);
+  opacity: 0;
+  transition:
+    transform 0.55s ease,
+    opacity 0.55s ease;
+
+  /* Keep nowrap on larger screens for clean animation */
+  white-space: nowrap;
+
+  /* Prevent text from overflowing container */
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.visible {
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+/* Allow wrapping on medium screens as well */
+@media (max-width: 768px) {
+  .phrase {
+    font-size: clamp(0.65rem, 1.05vw, 0.78rem);
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-wrap: break-word;
+  }
+
+  .wrapper {
+    min-height: 2.5em;
+  }
+}
+
+/* On very small screens, allow more space for wrapping */
+@media (max-width: 480px) {
+  .phrase {
+    font-size: clamp(0.62rem, 1vw, 0.75rem);
+  }
+
+  .wrapper {
+    min-height: 2.8em;
+  }
+}

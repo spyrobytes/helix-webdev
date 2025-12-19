@@ -1,0 +1,61 @@
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.75rem;
+  color: var(--accent-1);
+  margin-bottom: 0.9rem;
+}
+
+.title {
+  font-size: clamp(2.1rem, 5vw, 3.2rem);
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+.highlight {
+  background-image: linear-gradient(120deg, var(--accent-1), var(--accent-2), var(--accent-3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  white-space: nowrap;
+}
+
+.subtitle {
+  margin-top: 1rem;
+  font-size: 0.98rem;
+  max-width: 32rem;
+  color: var(--text-muted);
+}
+
+.subtitle strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.ctaRow {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.competencies {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent-1);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
+}

@@ -1,0 +1,142 @@
+/* ========================================
+   SCROLL INDICATOR
+   Hero section scroll affordance with auto-hide behavior
+   ======================================== */
+
+.indicator {
+  position: absolute;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: var(--z-content, 1);
+  pointer-events: none;
+
+  /* Initial state: hidden, will fade in after delay */
+  opacity: 0;
+  animation: fadeIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
+}
+
+/* Visibility states with smooth transitions */
+.visible {
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hidden {
+  opacity: 0 !important;
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Label text */
+.label {
+  color: var(--text-muted);
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+}
+
+/* Animated scroll line with multi-accent gradient */
+.line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-1),
+    /* Cyan top */ var(--accent-2) 60%,
+    /* Purple middle */ transparent /* Fade to transparent */
+  );
+  animation: scrollPulse 2s ease-in-out infinite;
+  border-radius: 1px;
+}
+
+/* Pulse animation - subtle breathing effect */
+@keyframes scrollPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scaleY(0.85);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* Fade in animation on mount */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+/* Tablet: Adjust bottom spacing */
+@media (max-width: 900px) {
+  .indicator {
+    bottom: 2rem;
+  }
+
+  .line {
+    height: 50px;
+  }
+}
+
+/* Mobile: Further reduce size and spacing */
+@media (max-width: 640px) {
+  .indicator {
+    bottom: 1.5rem;
+  }
+
+  .label {
+    font-size: 0.6rem;
+  }
+
+  .line {
+    height: 40px;
+  }
+}
+
+/* Very small screens: Hide completely to avoid content overlap */
+@media (max-width: 480px) {
+  .indicator {
+    display: none;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .indicator {
+    animation: fadeInReduced 0.01ms 1s forwards;
+  }
+
+  .line {
+    animation: none;
+    opacity: 0.6;
+  }
+
+  .visible,
+  .hidden {
+    transition-duration: 0.01ms;
+  }
+
+  @keyframes fadeInReduced {
+    to {
+      opacity: 1;
+    }
+  }
+}

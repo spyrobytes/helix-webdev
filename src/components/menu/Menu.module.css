@@ -1,0 +1,12 @@
+.menu {
+  position: relative;
+  z-index: var(--z-menu-base);
+}
+
+.open {
+  /* Applied when menu is open */
+}
+
+.scrolled {
+  /* Applied when page is scrolled */
+}

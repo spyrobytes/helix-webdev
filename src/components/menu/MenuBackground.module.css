@@ -1,0 +1,76 @@
+.bg {
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  /* Oversized so when fully open it feels rectangular, no bottom-left cutoff */
+  width: 200vw;
+  height: 200vh;
+
+  pointer-events: none;
+  z-index: var(--z-menu-bg);
+
+  /* Anchor in top-right corner for natural folding behavior */
+  transform-origin: 100% 0%;
+
+  /* Default closed state: small folded wedge */
+  transform: scale(0.22);
+
+  /* Smooth organic morphing transition */
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.6s ease-out;
+}
+
+/* Triangle/wedge path shape */
+.shape {
+  fill: #a855f7;
+  /* Smooth the path rendering */
+  transition: d 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: 100% 0%;
+}
+
+/* Subtle rotation on open for organic morphing */
+.shapeOpen {
+  animation: shapeRotate 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes shapeRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Open state: expand wedge to fill entire viewport */
+.bgOpen {
+  transform: scale(1.05);
+  /* Slightly slower expansion for more organic feel */
+  transition: transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.6s ease-out;
+  /* Always show when open, regardless of scroll state */
+  opacity: 1 !important;
+}
+
+/* Scrolled state: scale wedge down to serve as aesthetic backdrop */
+.bgScrolledNotOpen {
+  transform: scale(0.1);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Responsive adjustments for scaled wedge on mobile */
+@media (max-width: 639px) {
+  .bgScrolledNotOpen {
+    transform: scale(0.11);
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .bgScrolledNotOpen {
+    transform: scale(0.09);
+  }
+}

@@ -1,0 +1,396 @@
+/* ============================================================================
+   AI SHOWCASE SECTION - END-TO-END INTEGRATION TIMELINE
+   ============================================================================ */
+
+.section {
+  min-height: auto;
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-2) 50%,
+    transparent 100%
+  );
+  opacity: 0.4;
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.kicker {
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  color: var(--accent-2);
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 2rem;
+  background: rgba(168, 85, 247, 0.08);
+}
+
+.title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+}
+
+.gradient {
+  background: linear-gradient(135deg, var(--accent-2), var(--accent-5));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 36rem;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ============================================================================
+   TIMELINE
+   ============================================================================ */
+
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.timelineLine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(148, 163, 184, 0.2);
+  transform: translateX(-50%);
+}
+
+.timelineProgress {
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-1),
+    var(--accent-2),
+    var(--accent-3),
+    var(--accent-6),
+    var(--accent-5)
+  );
+  transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   STAGE
+   ============================================================================ */
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stage:last-child {
+  margin-bottom: 0;
+}
+
+.stage.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Alternating layout */
+.stage .stageContent {
+  grid-column: 1;
+  text-align: right;
+}
+
+.stage .node {
+  grid-column: 2;
+}
+
+.stage.right .stageContent {
+  grid-column: 3;
+  text-align: left;
+}
+
+/* ============================================================================
+   NODE
+   ============================================================================ */
+
+.node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.nodeInner {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 2px solid var(--stage-accent);
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.3),
+    0 0 30px color-mix(in srgb, var(--stage-accent) 20%, transparent);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.4s ease, border-color 0.4s ease;
+}
+
+/* Active state - when progress bar has reached this node */
+.nodeInner.active {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--stage-accent) 25%, transparent) 0%,
+    color-mix(in srgb, var(--stage-accent) 10%, transparent) 100%
+  );
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.3),
+    0 0 40px color-mix(in srgb, var(--stage-accent) 40%, transparent),
+    inset 0 0 20px color-mix(in srgb, var(--stage-accent) 15%, transparent);
+}
+
+.stage.visible .nodeInner {
+  animation: nodeAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes nodeAppear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.nodeIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--stage-accent);
+}
+
+.nodeNumber {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--stage-accent);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================================
+   STAGE CONTENT
+   ============================================================================ */
+
+.stageContent {
+  padding-top: 0.5rem;
+}
+
+.stageTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.stageDescription {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.stage .stageDescription {
+  margin-left: auto;
+}
+
+.stage.right .stageDescription {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+/* ============================================================================
+   HIGHLIGHT
+   ============================================================================ */
+
+.highlight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 4rem;
+  padding: 2rem;
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.08) 0%,
+    rgba(56, 189, 248, 0.08) 100%
+  );
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.highlight.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.highlightIcon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.highlightIcon svg {
+  width: 32px;
+  height: 32px;
+  color: var(--accent-2);
+}
+
+.highlightText {
+  font-size: 1rem;
+  color: var(--text-main);
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 767px) {
+  .section {
+    padding: 4rem 1rem;
+  }
+
+  .timeline {
+    padding-left: 2rem;
+  }
+
+  .timelineLine {
+    left: 0;
+    transform: none;
+  }
+
+  .stage {
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  .stage .stageContent,
+  .stage.right .stageContent {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  .stage .node {
+    grid-column: 1;
+  }
+
+  .stage .stageDescription,
+  .stage.right .stageDescription {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: none;
+  }
+
+  .nodeInner {
+    width: 44px;
+    height: 44px;
+  }
+
+  .nodeIcon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .highlight {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .stage,
+  .highlight {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .timelineProgress {
+    transition: none;
+  }
+
+  .stage.visible .nodeInner {
+    animation: none;
+  }
+}

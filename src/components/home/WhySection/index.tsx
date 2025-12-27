@@ -22,7 +22,7 @@ export function WhySection(): React.JSX.Element {
           <div className={sectionStyles.kicker}>Why Helixbytes</div>
           <h2 className={sectionStyles.title}>Innovation Without Boundaries. Partners Without Silos.</h2>
           <p className={sectionStyles.subtitle}>
-            You're not just looking for a vendor—you're looking for a technical
+            You&apos;re not just looking for a vendor—you&apos;re looking for a technical
             partner who understands complexity, communicates clearly, and ships
             high-quality solutions.
           </p>
@@ -50,12 +50,12 @@ export function WhySection(): React.JSX.Element {
               <p className={styles.description}>
                 Helixbytes brings together full-stack engineering, AI integration,
                 and cybersecurity into a single, cohesive offering. That means you
-                don't have to manage multiple disconnected teams or compromise on
+                don&apos;t have to manage multiple disconnected teams or compromise on
                 depth of expertise.
               </p>
               <p className={styles.description}>
                 We thrive in environments where reliability, performance, and
-                security are non-negotiable—whether that's a digital product,
+                security are non-negotiable—whether that&apos;s a digital product,
                 internal platform, or mission-critical public service.
               </p>
             </div>
@@ -69,8 +69,8 @@ export function WhySection(): React.JSX.Element {
           >
             <h3>Ready to Explore What We Can Build Together?</h3>
             <p>
-              Whether you're validating an idea, modernizing legacy systems, or
-              scaling an existing platform, we'd love to hear about it.
+              Whether you&apos;re validating an idea, modernizing legacy systems, or
+              scaling an existing platform, we&apos;d love to hear about it.
             </p>
 
             <Button variant="primary" style={{ width: '100%', justifyContent: 'center' }}>

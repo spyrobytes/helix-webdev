@@ -1,6 +1,32 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // =========================================================================
+    // CONTACT SUBMISSIONS
+    // Only Cloud Functions can write (via Admin SDK)
+    // No client-side reads or writes allowed
+    // =========================================================================
+    match /contactSubmissions/{submissionId} {
+      // Deny all client access - only Admin SDK (Cloud Functions) can access
+      allow read, write: if false;
+    }
+
+    // =========================================================================
+    // RATE LIMITS
+    // Only Cloud Functions can read/write (via Admin SDK)
+    // No client-side access allowed
+    // =========================================================================
+    match /rateLimits/{ipHash} {
+      // Deny all client access - only Admin SDK (Cloud Functions) can access
+      allow read, write: if false;
+    }
+
+    // =========================================================================
+    // DEFAULT DENY
+    // All other documents are denied by default
+    // =========================================================================
     match /{document=**} {
       allow read, write: if false;
     }

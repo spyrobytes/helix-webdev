@@ -1,6 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
 /node_modules
 /.pnp
 .pnp.*
@@ -10,64 +12,103 @@
 !.yarn/releases
 !.yarn/versions
 
-# Environment variables
+# =============================================================================
+# ENVIRONMENT & SECRETS
+# =============================================================================
 .env
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env*.local
+*.local
 
-# Firebase
+# Firebase service account keys (NEVER commit these)
+*-firebase-adminsdk-*.json
+service-account*.json
+firebase-service-account*.json
+serviceAccountKey*.json
+*-credentials.json
+
+# Private keys
+*.pem
+*.key
+*.p12
+
+# =============================================================================
+# FIREBASE
+# =============================================================================
 .firebase/
+.firebaserc
 firebase-debug.log
 firestore-debug.log
+database-debug.log
+pubsub-debug.log
 ui-debug.log
-.firebaserc
+firebase-export-*/
+emulator-data/
 
-# IDE
+# =============================================================================
+# NEXT.JS
+# =============================================================================
+/.next/
+/out/
+/build
+.vercel
+.turbo
+
+# =============================================================================
+# IDE & EDITORS
+# =============================================================================
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+*.sublime-*
 
-# OS
+# =============================================================================
+# OS FILES
+# =============================================================================
 .DS_Store
 Thumbs.db
+Desktop.ini
+*.lnk
 
-# Logs
+# =============================================================================
+# LOGS & DEBUG
+# =============================================================================
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-.vercel
-.turbo
-
-# debug
+logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+lerna-debug.log*
 
-# typescript
+# =============================================================================
+# TESTING & COVERAGE
+# =============================================================================
+/coverage
+.nyc_output
+*.lcov
+
+# =============================================================================
+# TYPESCRIPT
+# =============================================================================
 *.tsbuildinfo
-next-env.d.ts
 
-# implementation details
+# =============================================================================
+# INTERNAL / IMPLEMENTATION DETAILS
+# These files are for internal development use only
+# =============================================================================
 artifacts/
 docs/
-CLAUDE.md
-.claude/
 scripts/
+CLAUDE.md
+REPORT.md
+.claude/
+*.draft.md
+*.internal.md
+TODO.md
+NOTES.md

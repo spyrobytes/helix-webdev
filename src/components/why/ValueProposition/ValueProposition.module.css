@@ -1,0 +1,136 @@
+.section {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(236, 72, 153, 0.03) 50%, transparent 100%);
+}
+
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.content {
+  position: sticky;
+  top: 120px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  color: var(--accent-5);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.point {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s ease;
+}
+
+.point.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.point:hover {
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.pointNumber {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-5);
+  opacity: 0.6;
+  padding-top: 0.2rem;
+}
+
+.pointContent {
+  flex: 1;
+}
+
+.pointTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.35rem;
+}
+
+.pointDescription {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .content {
+    position: static;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 3rem 1rem;
+  }
+
+  .point {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .point {
+    opacity: 1;
+    transform: none;
+    transition: border-color 0.3s ease;
+  }
+}

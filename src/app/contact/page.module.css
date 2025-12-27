@@ -1,0 +1,30 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding: 0 0 6rem;
+}
+
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 0 1rem 4rem;
+  }
+}

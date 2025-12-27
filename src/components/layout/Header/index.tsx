@@ -12,7 +12,7 @@ export function Header(): React.JSX.Element {
         <BrandLogo />
         <div className={styles.navRight}>
           <a href="#contact" className={styles.navCta}>
-            Let's Talk <span>↗</span>
+            Let&apos;s Talk <span>↗</span>
           </a>
           <FullscreenMenu items={MENU_ITEMS} />
         </div>

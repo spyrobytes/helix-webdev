@@ -1,0 +1,353 @@
+/* ============================================================================
+   SERVICE DETAIL SECTION
+   ============================================================================ */
+
+.section {
+  min-height: auto;
+  padding: 5rem 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--border-subtle) 20%,
+    var(--border-subtle) 80%,
+    transparent 100%
+  );
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.reversed .inner {
+  grid-template-columns: 1.5fr 1fr;
+}
+
+.reversed .visual {
+  order: 2;
+}
+
+.reversed .content {
+  order: 1;
+}
+
+/* ============================================================================
+   VISUAL SIDE
+   ============================================================================ */
+
+.visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reversed .visual {
+  transform: translateX(40px);
+}
+
+.visual.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.iconContainer {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 1;
+}
+
+.iconContainer::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 1.6rem;
+  background: linear-gradient(135deg, var(--accent-color), transparent);
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  color: var(--accent-color);
+}
+
+/* Decorative elements */
+.decorLine {
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-color),
+    transparent
+  );
+  margin-top: 1.5rem;
+  opacity: 0.5;
+}
+
+.decorDots {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  opacity: 0.6;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================================
+   CONTENT SIDE
+   ============================================================================ */
+
+.content {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+
+.content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.number {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.description {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+/* ============================================================================
+   TAGS
+   ============================================================================ */
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--accent-color);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.tag:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ============================================================================
+   CAPABILITIES
+   ============================================================================ */
+
+.capabilities {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.capabilitiesLabel {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.capabilitiesList {
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.capabilityItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  opacity: 0;
+  transform: translateX(-10px);
+  animation: slideIn 0.4s ease forwards;
+  animation-play-state: paused;
+}
+
+.content.visible .capabilityItem {
+  animation-play-state: running;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.capabilityItem svg {
+  flex-shrink: 0;
+  color: var(--accent-color);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .reversed .inner {
+    grid-template-columns: 1fr;
+  }
+
+  .reversed .visual,
+  .reversed .content {
+    order: unset;
+  }
+
+  .header {
+    justify-content: center;
+  }
+
+  .tags {
+    justify-content: center;
+  }
+
+  .capabilitiesList {
+    text-align: left;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding: 3rem 1rem;
+  }
+
+  .iconContainer {
+    width: 90px;
+    height: 90px;
+    border-radius: 1rem;
+  }
+
+  .icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .decorLine {
+    height: 40px;
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .visual,
+  .content {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .capabilityItem {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .dot {
+    animation: none;
+    opacity: 0.6;
+  }
+}

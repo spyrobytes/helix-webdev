@@ -1,8 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { BrandLogo } from './BrandLogo';
 import { FullscreenMenu } from '@/components/menu';
-import { MENU_ITEMS } from '@/constants/data';
+import { NAVIGATION_ITEMS } from '@/constants/data';
 import styles from './Header.module.css';
 
 export function Header(): React.JSX.Element {
@@ -11,10 +12,10 @@ export function Header(): React.JSX.Element {
       <nav className={styles.nav}>
         <BrandLogo />
         <div className={styles.navRight}>
-          <a href="#contact" className={styles.navCta}>
+          <Link href="/contact" className={styles.navCta}>
             Let&apos;s Talk <span>↗</span>
-          </a>
-          <FullscreenMenu items={MENU_ITEMS} />
+          </Link>
+          <FullscreenMenu items={NAVIGATION_ITEMS} />
         </div>
       </nav>
     </header>

@@ -34,3 +34,13 @@
   width: 60%;
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
 }
+
+/* Active state for current page */
+.active {
+  color: var(--accent-1);
+}
+
+.active::after {
+  width: 40%;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+}

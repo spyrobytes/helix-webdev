@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useFooterAnimations } from '@/hooks/useFooterAnimations';
 import styles from './Footer.module.css';
 
@@ -47,29 +48,29 @@ export function Footer(): React.JSX.Element {
           <h2 className={styles.columnTitle}>Quick Links</h2>
           <ul className={styles.linkList}>
             <li>
-              <a href="/services" className={styles.navLink}>
+              <Link href="/services" className={styles.navLink}>
                 Services
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/approach" className={styles.navLink}>
+              <Link href="/approach" className={styles.navLink}>
                 Approach
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/why-helixbytes" className={styles.navLink}>
+              <Link href="/why-helixbytes" className={styles.navLink}>
                 Why Helixbytes
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/contact" className={styles.navLink}>
+              <Link href="/contact" className={styles.navLink}>
                 Let&apos;s Talk
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/blog" className={styles.navLink}>
+              <Link href="/blog" className={styles.navLink}>
                 Blog
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -89,12 +90,12 @@ export function Footer(): React.JSX.Element {
             <p className={styles.hours}>Mon–Fri, 9am–6pm (MT)</p>
           </address>
 
-          <a href="/contact" className={styles.ctaButton}>
+          <Link href="/contact" className={styles.ctaButton}>
             <span>Let&apos;s Talk</span>
             <span aria-hidden="true" className={styles.ctaArrow}>
               →
             </span>
-          </a>
+          </Link>
         </section>
 
         {/* Social */}

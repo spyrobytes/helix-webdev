@@ -1,4 +1,5 @@
-import { useSmoothScroll } from '@/hooks/useSmoothScroll';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styles from './MenuLink.module.css';
 
 interface MenuLinkProps {
@@ -8,17 +9,16 @@ interface MenuLinkProps {
 }
 
 export function MenuLink({ href, children, onClose }: MenuLinkProps): React.JSX.Element {
-  const smoothScroll = useSmoothScroll();
+  const pathname = usePathname();
+  const isActive = pathname === href || (href !== '/' && pathname.startsWith(href));
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>): void => {
-    e.preventDefault();
-    smoothScroll(href);
-    onClose();
-  };
+  const linkClass = isActive
+    ? `${styles.link} ${styles.active}`
+    : styles.link;
 
   return (
-    <a href={href} className={styles.link} onClick={handleClick}>
+    <Link href={href} className={linkClass} onClick={onClose}>
       {children}
-    </a>
+    </Link>
   );
 }

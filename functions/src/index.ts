@@ -11,7 +11,19 @@
 
 import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
+import { defineSecret } from "firebase-functions/params";
 import * as admin from "firebase-admin";
+import Mailgun from "mailgun.js";
+import FormData from "form-data";
+
+// ============================================================================
+// SECRETS (set via: firebase functions:secrets:set SECRET_NAME)
+// ============================================================================
+
+const mailgunApiKey = defineSecret("MAILGUN_API_KEY");
+const mailgunDomain = defineSecret("MAILGUN_DOMAIN");
+const mailgunFrom = defineSecret("MAILGUN_FROM");
+const appBaseUrl = defineSecret("APP_BASE_URL");
 
 // Initialize Firebase Admin
 admin.initializeApp();
@@ -63,8 +75,8 @@ const CONFIG = {
   allowedOrigins: [
     "http://localhost:3000",
     "http://localhost:5000",
-    "https://helixbytes.digital",
-    "https://www.helixbytes.digital",
+    "https://helixbytes.com",
+    "https://www.helixbytes.com",
   ],
 };
 
@@ -269,30 +281,198 @@ function validateFormData(
 }
 
 /**
- * Send email via Mailgun (placeholder - implement with your Mailgun setup)
+ * Generate HTML email template for contact form notification
  */
-async function sendEmail(data: ContactFormData): Promise<void> {
-  // TODO: Implement Mailgun integration
-  // For now, just log the data
-  console.log("Email would be sent:", {
-    to: "hello@helixbytes.digital",
-    subject: `New Contact: ${data.name}`,
-    from: data.email,
+function generateEmailHtml(data: ContactFormData, submissionId: string): string {
+  const timestamp = data._timestamp
+    ? new Date(data._timestamp).toLocaleString("en-US", {
+        dateStyle: "full",
+        timeStyle: "short",
+        timeZone: data._timezone || "UTC",
+      })
+    : new Date().toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" });
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Contact Form Submission</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #0f172a; color: #f9fafb;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #0f172a; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 30px; background: linear-gradient(135deg, #050816 0%, #0f172a 100%); border-radius: 16px 16px 0 0; border: 1px solid rgba(148, 163, 184, 0.2); border-bottom: none;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <h1 style="margin: 0; font-size: 24px; font-weight: 700;">
+                      <span style="color: #f755f5;">HELIX</span><span style="color: #22c55e;">BYTES</span>
+                    </h1>
+                    <p style="margin: 4px 0 0; font-size: 12px; color: #00f5ff; letter-spacing: 0.1em;">NEW CONTACT SUBMISSION</p>
+                  </td>
+                  <td align="right" style="color: #9ca3af; font-size: 13px;">
+                    ${timestamp}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Content -->
+          <tr>
+            <td style="padding: 30px; background-color: rgba(15, 23, 42, 0.95); border: 1px solid rgba(148, 163, 184, 0.2); border-top: none; border-bottom: none;">
+              <!-- Contact Info -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 16px; background: rgba(56, 189, 248, 0.05); border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding-bottom: 12px;">
+                          <span style="color: #9ca3af; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">From</span><br>
+                          <span style="color: #f9fafb; font-size: 18px; font-weight: 600;">${escapeHtml(data.name)}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-bottom: ${data.company || data.projectType ? "12px" : "0"};">
+                          <span style="color: #9ca3af; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Email</span><br>
+                          <a href="mailto:${escapeHtml(data.email)}" style="color: #38bdf8; font-size: 16px; text-decoration: none;">${escapeHtml(data.email)}</a>
+                        </td>
+                      </tr>
+                      ${data.company ? `
+                      <tr>
+                        <td style="padding-bottom: ${data.projectType ? "12px" : "0"};">
+                          <span style="color: #9ca3af; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Company</span><br>
+                          <span style="color: #f9fafb; font-size: 16px;">${escapeHtml(data.company)}</span>
+                        </td>
+                      </tr>
+                      ` : ""}
+                      ${data.projectType ? `
+                      <tr>
+                        <td>
+                          <span style="color: #9ca3af; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Project Type</span><br>
+                          <span style="display: inline-block; padding: 4px 12px; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; color: #a855f7; font-size: 14px;">${escapeHtml(data.projectType)}</span>
+                        </td>
+                      </tr>
+                      ` : ""}
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Message -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <span style="color: #9ca3af; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Message</span>
+                    <div style="margin-top: 8px; padding: 20px; background: rgba(15, 23, 42, 0.5); border-radius: 12px; border: 1px solid rgba(148, 163, 184, 0.15);">
+                      <p style="margin: 0; color: #e2e8f0; font-size: 15px; line-height: 1.7; white-space: pre-wrap;">${escapeHtml(data.message)}</p>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 20px 30px; background: rgba(15, 23, 42, 0.8); border-radius: 0 0 16px 16px; border: 1px solid rgba(148, 163, 184, 0.2); border-top: none;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="color: #64748b; font-size: 12px;">
+                    Submission ID: <code style="color: #9ca3af;">${submissionId}</code>
+                  </td>
+                  <td align="right">
+                    <a href="${appBaseUrl.value()}" style="color: #38bdf8; font-size: 12px; text-decoration: none;">View Dashboard →</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+}
+
+/**
+ * Generate plain text email for contact form notification
+ */
+function generateEmailText(data: ContactFormData, submissionId: string): string {
+  const timestamp = data._timestamp
+    ? new Date(data._timestamp).toLocaleString("en-US", {
+        dateStyle: "full",
+        timeStyle: "short",
+        timeZone: data._timezone || "UTC",
+      })
+    : new Date().toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" });
+
+  let text = `NEW CONTACT FORM SUBMISSION\n`;
+  text += `${"=".repeat(40)}\n\n`;
+  text += `Date: ${timestamp}\n\n`;
+  text += `FROM\n`;
+  text += `Name: ${data.name}\n`;
+  text += `Email: ${data.email}\n`;
+  if (data.company) text += `Company: ${data.company}\n`;
+  if (data.projectType) text += `Project Type: ${data.projectType}\n`;
+  text += `\nMESSAGE\n`;
+  text += `${"-".repeat(40)}\n`;
+  text += `${data.message}\n`;
+  text += `${"-".repeat(40)}\n\n`;
+  text += `Submission ID: ${submissionId}\n`;
+
+  return text;
+}
+
+/**
+ * Escape HTML special characters
+ */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/**
+ * Send email via Mailgun
+ */
+async function sendEmail(data: ContactFormData, submissionId: string): Promise<void> {
+  const mailgun = new Mailgun(FormData);
+  const mg = mailgun.client({
+    username: "api",
+    key: mailgunApiKey.value(),
   });
 
-  // Example Mailgun implementation:
-  // const mailgun = new Mailgun(formData);
-  // const mg = mailgun.client({
-  //   username: 'api',
-  //   key: process.env.MAILGUN_API_KEY,
-  // });
-  // await mg.messages.create(process.env.MAILGUN_DOMAIN, {
-  //   from: `Helixbytes Contact <noreply@${process.env.MAILGUN_DOMAIN}>`,
-  //   to: ['hello@helixbytes.digital'],
-  //   subject: `New Contact Form: ${data.name}`,
-  //   text: `...`,
-  //   html: `...`,
-  // });
+  const domain = mailgunDomain.value();
+  const from = mailgunFrom.value();
+
+  const messageData = {
+    from: from,
+    to: ["hello@helixbytes.digital"],
+    subject: `New Contact: ${data.name}${data.company ? ` (${data.company})` : ""}`,
+    text: generateEmailText(data, submissionId),
+    html: generateEmailHtml(data, submissionId),
+    "h:Reply-To": data.email,
+  };
+
+  try {
+    const result = await mg.messages.create(domain, messageData);
+    console.log("Email sent successfully:", result.id);
+  } catch (error) {
+    console.error("Mailgun error:", error);
+    throw error;
+  }
 }
 
 // ============================================================================
@@ -303,6 +483,7 @@ export const submitContactForm = onRequest(
   {
     cors: CONFIG.allowedOrigins,
     maxInstances: 10,
+    secrets: [mailgunApiKey, mailgunDomain, mailgunFrom, appBaseUrl],
   },
   async (req, res) => {
     // Only allow POST requests
@@ -364,7 +545,7 @@ export const submitContactForm = onRequest(
 
       // Send notification email
       try {
-        await sendEmail(formData);
+        await sendEmail(formData, submissionRef.id);
       } catch (emailError) {
         console.error("Failed to send email:", emailError);
         // Don't fail the request if email fails - submission is already stored

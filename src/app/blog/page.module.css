@@ -1,0 +1,121 @@
+/* ============================================================================
+   BLOG INDEX PAGE
+   ============================================================================ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================================
+   HERO SECTION
+   ============================================================================ */
+
+.hero {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 1rem 4rem;
+}
+
+.heroContent {
+  text-align: center;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.kicker {
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.75rem;
+  color: var(--accent-1);
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 2rem;
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
+}
+
+.highlight {
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* ============================================================================
+   POSTS GRID
+   ============================================================================ */
+
+.postsSection {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem 6rem;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+/* ============================================================================
+   EMPTY STATE
+   ============================================================================ */
+
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+}
+
+.emptyText {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto;
+    padding: 6rem 1rem 3rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .postsSection {
+    padding-bottom: 4rem;
+  }
+}

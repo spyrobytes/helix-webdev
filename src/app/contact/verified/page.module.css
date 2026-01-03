@@ -33,6 +33,92 @@
   color: var(--accent-3);
 }
 
+/* Info icon - blue theme */
+.iconInfo {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(56, 189, 248, 0.1);
+  border: 2px solid rgba(56, 189, 248, 0.3);
+  border-radius: 50%;
+}
+
+.iconInfo svg {
+  width: 36px;
+  height: 36px;
+  color: var(--accent-1);
+}
+
+/* Warning icon - orange theme */
+.iconWarning {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(251, 191, 36, 0.1);
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  border-radius: 50%;
+}
+
+.iconWarning svg {
+  width: 36px;
+  height: 36px;
+  color: #fbbf24;
+}
+
+/* Error icon - red theme */
+.iconError {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 50%;
+}
+
+.iconError svg {
+  width: 36px;
+  height: 36px;
+  color: #ef4444;
+}
+
+/* Loading icon - subtle theme with animation */
+.iconLoading {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(148, 163, 184, 0.1);
+  border: 2px solid rgba(148, 163, 184, 0.3);
+  border-radius: 50%;
+}
+
+.iconLoading svg {
+  width: 36px;
+  height: 36px;
+  color: var(--text-muted);
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .title {
   font-size: 1.75rem;
   font-weight: 700;

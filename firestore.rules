@@ -4,22 +4,154 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // =========================================================================
+    // HELPER FUNCTIONS: Validation
+    // =========================================================================
+
+    function isValidEmail(email) {
+      return email is string
+             && email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$')
+             && email.size() >= 5
+             && email.size() <= 254;
+    }
+
+    function isValidName(name) {
+      return name is string
+             && name.size() >= 2
+             && name.size() <= 100;
+    }
+
+    function isValidMessage(message) {
+      return message is string
+             && message.size() >= 20
+             && message.size() <= 5000;
+    }
+
+    function isValidCompany(company) {
+      return company is string && company.size() <= 100;
+    }
+
+    function isValidProjectType(projectType) {
+      return projectType is string && projectType.size() <= 100;
+    }
+
+    function isValidIpHash(ipHash) {
+      return ipHash is string && ipHash.size() <= 20;
+    }
+
+    function isValidStatus(status) {
+      return status is string && status in ['pending', 'verified'];
+    }
+
+    function isValidSource(source) {
+      return source is string && source == 'website';
+    }
+
+    function isValidVerificationToken(token) {
+      // 64 character hex string
+      return token is string
+             && token.size() == 64
+             && token.matches('^[a-f0-9]{64}$');
+    }
+
+    // =========================================================================
     // CONTACT SUBMISSIONS
-    // Only Cloud Functions can write (via Admin SDK)
-    // No client-side reads or writes allowed
+    // Comprehensive validation for contact form submissions
     // =========================================================================
     match /contactSubmissions/{submissionId} {
-      // Deny all client access - only Admin SDK (Cloud Functions) can access
-      allow read, write: if false;
+
+      // -----------------------------------------------------------------------
+      // Required fields for a valid submission
+      // -----------------------------------------------------------------------
+      function hasRequiredFields(data) {
+        return data.keys().hasAll([
+          'name',
+          'email',
+          'message',
+          'ipHash',
+          'createdAt',
+          'status',
+          'source',
+          'emailVerified',
+          'verificationToken',
+          'verificationTokenExpiresAt'
+        ]);
+      }
+
+      // -----------------------------------------------------------------------
+      // Validate all fields in a new submission
+      // -----------------------------------------------------------------------
+      function isValidSubmission(data) {
+        return hasRequiredFields(data)
+               // Required field validations
+               && isValidName(data.name)
+               && isValidEmail(data.email)
+               && isValidMessage(data.message)
+               && isValidIpHash(data.ipHash)
+               && data.createdAt is timestamp
+               && isValidStatus(data.status)
+               && isValidSource(data.source)
+               && data.emailVerified is bool
+               && isValidVerificationToken(data.verificationToken)
+               && data.verificationTokenExpiresAt is timestamp
+               // Optional field validations (if present)
+               && (!data.keys().hasAny(['company']) || isValidCompany(data.company))
+               && (!data.keys().hasAny(['projectType']) || isValidProjectType(data.projectType))
+               && (!data.keys().hasAny(['_timestamp']) || data._timestamp is number)
+               && (!data.keys().hasAny(['_timezone']) || (data._timezone is string && data._timezone.size() <= 100))
+               // HONEYPOT: Reject if 'website' field exists (bot detection)
+               && !data.keys().hasAny(['website'])
+               // Prevent unknown fields - limit to expected fields only
+               && data.keys().size() <= 12;
+      }
+
+      // -----------------------------------------------------------------------
+      // Validate verification update (when email is verified)
+      // -----------------------------------------------------------------------
+      function isValidVerificationUpdate(oldData, newData) {
+        // Can only update specific fields during verification
+        return newData.emailVerified == true
+               && newData.status == 'verified'
+               && newData.verifiedAt is timestamp
+               // Token should be removed after verification
+               && !newData.keys().hasAny(['verificationToken', 'verificationTokenExpiresAt'])
+               // Core fields must not change
+               && newData.name == oldData.name
+               && newData.email == oldData.email
+               && newData.message == oldData.message
+               && newData.ipHash == oldData.ipHash
+               && newData.createdAt == oldData.createdAt
+               && newData.source == oldData.source;
+      }
+
+      // -----------------------------------------------------------------------
+      // Access Rules
+      // -----------------------------------------------------------------------
+
+      // Client SDK access is denied - all operations go through Cloud Functions
+      // These rules serve as documentation and validation reference
+      // Admin SDK (Cloud Functions) bypasses these rules but should follow the same validation
+
+      allow create: if false;  // Only via Cloud Function (Admin SDK)
+      allow read: if false;    // Only via Cloud Function (Admin SDK)
+      allow update: if false;  // Only via Cloud Function (Admin SDK)
+      allow delete: if false;  // Only via Cloud Function (Admin SDK)
     }
 
     // =========================================================================
     // RATE LIMITS
-    // Only Cloud Functions can read/write (via Admin SDK)
-    // No client-side access allowed
+    // IP-based rate limiting for abuse prevention
     // =========================================================================
     match /rateLimits/{ipHash} {
-      // Deny all client access - only Admin SDK (Cloud Functions) can access
+
+      function isValidRateLimitDoc(data) {
+        return data.keys().hasAll(['count', 'windowStart'])
+               && data.count is int
+               && data.count >= 0
+               && data.count <= 100  // Reasonable upper bound
+               && data.windowStart is timestamp;
+      }
+
+      // Client SDK access is denied - managed by Cloud Functions only
       allow read, write: if false;
     }
 

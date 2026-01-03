@@ -10,6 +10,10 @@
       {
         "source": "/api/contact",
         "function": "submitContactForm"
+      },
+      {
+        "source": "/api/verify-email",
+        "function": "verifyEmail"
       }
     ],
     "headers": [

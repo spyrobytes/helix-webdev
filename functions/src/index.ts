@@ -73,17 +73,38 @@ const CONFIG = {
     messageMinLength: 20,
     messageMaxLength: 5000,
   },
-  // Allowed origins (update for production)
-  allowedOrigins: [
-    "http://localhost:3000",
-    "http://localhost:5000",
-    "https://helixbytes.com",
-    "https://www.helixbytes.com",
-  ],
+  // Allowed origins for CORS
+  // In production, localhost origins are ignored by Firebase Hosting rewrites
+  // but we filter them out explicitly for direct function invocation
+  allowedOrigins: process.env.NODE_ENV === "production"
+    ? [
+        "https://helixbytes.com",
+        "https://www.helixbytes.com",
+      ]
+    : [
+        "http://localhost:3000",
+        "http://localhost:5000",
+        "https://helixbytes.com",
+        "https://www.helixbytes.com",
+      ],
 };
 
+// ============================================================================// SECURITY HEADERS
 // ============================================================================
-// UTILITY FUNCTIONS
+
+/**
+ * Set security headers on HTTP responses
+ */
+function setSecurityHeaders(res: { set: (headers: Record<string, string>) => void }): void {
+  res.set({
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+  });
+}
+
+// ============================================================================// UTILITY FUNCTIONS
 // ============================================================================
 
 /**
@@ -649,6 +670,9 @@ export const submitContactForm = onRequest(
     secrets: [mailgunApiKey, mailgunDomain, mailgunFrom, appBaseUrl],
   },
   async (req, res) => {
+    // Set security headers
+    setSecurityHeaders(res);
+
     // Only allow POST requests
     if (req.method !== "POST") {
       res.status(405).json({ success: false, message: "Method not allowed" });
@@ -757,6 +781,9 @@ export const verifyEmail = onRequest(
     secrets: [appBaseUrl],
   },
   async (req, res) => {
+    // Set security headers
+    setSecurityHeaders(res);
+
     try {
       // Extract token from query parameter
       const token = req.query.token as string;
@@ -869,26 +896,37 @@ export const cleanupUnverifiedSubmissions = onSchedule(
 );
 
 // ============================================================================
-// OPTIONAL: Cleanup old rate limit records (uncomment to enable)
+// SCHEDULED FUNCTION: Cleanup old rate limit records (runs daily at 4 AM UTC)
 // ============================================================================
 
-// export const cleanupRateLimits = onSchedule(
-//   {
-//     schedule: "0 4 * * *", // Daily at 4:00 AM UTC
-//     timeZone: "UTC",
-//     maxInstances: 1,
-//   },
-//   async () => {
-//     const cutoff = admin.firestore.Timestamp.fromDate(
-//       new Date(Date.now() - 24 * 60 * 60 * 1000)
-//     );
-//     const snapshot = await db
-//       .collection("rateLimits")
-//       .where("windowStart", "<", cutoff)
-//       .get();
-//     const batch = db.batch();
-//     snapshot.docs.forEach((doc) => batch.delete(doc.ref));
-//     await batch.commit();
-//     console.log(`Cleaned up ${snapshot.size} old rate limit records`);
-//   }
-// );
+export const cleanupRateLimits = onSchedule(
+  {
+    schedule: "0 4 * * *", // Daily at 4:00 AM UTC
+    timeZone: "UTC",
+    maxInstances: 1,
+  },
+  async () => {
+    try {
+      const cutoff = admin.firestore.Timestamp.fromDate(
+        new Date(Date.now() - 24 * 60 * 60 * 1000)
+      );
+      const snapshot = await db
+        .collection("rateLimits")
+        .where("windowStart", "<", cutoff)
+        .get();
+
+      if (snapshot.empty) {
+        console.log("No old rate limit records to clean up");
+        return;
+      }
+
+      const batch = db.batch();
+      snapshot.docs.forEach((doc) => batch.delete(doc.ref));
+      await batch.commit();
+      console.log(`Cleaned up ${snapshot.size} old rate limit records`);
+    } catch (error) {
+      console.error("Rate limit cleanup error:", error);
+      throw error;
+    }
+  }
+);

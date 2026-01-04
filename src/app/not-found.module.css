@@ -1,0 +1,489 @@
+/* ============================================================================
+   404 NOT FOUND PAGE
+   Dark theme with animated orbs, glitch effects, and brand aesthetics
+   ============================================================================ */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 1.5rem;
+  overflow: hidden;
+}
+
+/* ============================================================================
+   ANIMATED BACKGROUND ORBS
+   ============================================================================ */
+
+.bgOrbs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb1,
+.orb2,
+.orb3 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: float 20s ease-in-out infinite;
+}
+
+.orb1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--accent-2), transparent 70%);
+  top: -10%;
+  left: -5%;
+  animation-delay: 0s;
+}
+
+.orb2 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--accent-1), transparent 70%);
+  bottom: -15%;
+  right: -10%;
+  animation-delay: -7s;
+}
+
+.orb3 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, var(--brand-helix), transparent 70%);
+  top: 40%;
+  right: 20%;
+  animation-delay: -14s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(30px, -30px) scale(1.05);
+  }
+  50% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+  75% {
+    transform: translate(20px, 10px) scale(1.02);
+  }
+}
+
+/* ============================================================================
+   CONTENT CONTAINER
+   ============================================================================ */
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ============================================================================
+   ERROR CODE DISPLAY
+   ============================================================================ */
+
+.errorDisplay {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.errorCode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  font-size: clamp(5rem, 20vw, 10rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.digit {
+  display: inline-block;
+  background: linear-gradient(
+    180deg,
+    var(--text-main) 0%,
+    rgba(148, 163, 184, 0.7) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: digitBounce 3s ease-in-out infinite;
+}
+
+.digit:first-child {
+  animation-delay: 0s;
+}
+
+.digit:last-child {
+  animation-delay: 0.3s;
+}
+
+/* The zero gets special treatment - it's the troublemaker */
+.digitZero {
+  display: inline-block;
+  background: linear-gradient(
+    135deg,
+    var(--brand-helix) 0%,
+    var(--accent-1) 50%,
+    var(--brand-bytes) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: zeroWobble 4s ease-in-out infinite;
+  animation-delay: 0.15s;
+  transform-origin: center bottom;
+}
+
+/* Playful bounce animation for the 4s */
+@keyframes digitBounce {
+  0%, 85%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  90% {
+    transform: translateY(-12px) rotate(3deg);
+  }
+  95% {
+    transform: translateY(-6px) rotate(-2deg);
+  }
+}
+
+/* The zero wobbles and spins occasionally - it's clearly lost */
+@keyframes zeroWobble {
+  0%, 70%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  75% {
+    transform: translateY(-8px) rotate(-5deg) scale(1.05);
+  }
+  80% {
+    transform: translateY(4px) rotate(8deg) scale(0.98);
+  }
+  85% {
+    transform: translateY(-4px) rotate(-3deg) scale(1.02);
+  }
+  90% {
+    transform: translateY(0) rotate(360deg) scale(1);
+  }
+}
+
+/* Easter egg: hover to make the zero spin wildly */
+.errorCode:hover .digitZero {
+  animation: zeroSpin 0.8s ease-in-out;
+}
+
+@keyframes zeroSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.15);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.15);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* Glitch overlay effect - subtle and intermittent */
+.errorGlitch {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(5rem, 20vw, 10rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: transparent;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  background-clip: text;
+  -webkit-background-clip: text;
+  opacity: 0;
+  animation: glitch 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glitch {
+  0%, 92%, 100% {
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  93% {
+    opacity: 0.6;
+    transform: translate(calc(-50% + 3px), calc(-50% - 2px));
+  }
+  94% {
+    opacity: 0;
+  }
+  95% {
+    opacity: 0.4;
+    transform: translate(calc(-50% - 2px), calc(-50% + 1px));
+  }
+  96% {
+    opacity: 0;
+  }
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+
+.title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================================
+   PRIMARY ACTION BUTTON
+   ============================================================================ */
+
+.actions {
+  margin-bottom: 3rem;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.3),
+    rgba(56, 189, 248, 0.2)
+  );
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 999px;
+  box-shadow:
+    0 0 20px rgba(168, 85, 247, 0.3),
+    0 8px 32px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.primaryButton svg {
+  width: 20px;
+  height: 20px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.primaryButton:hover,
+.primaryButton:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--accent-1);
+  box-shadow:
+    0 0 30px rgba(56, 189, 248, 0.4),
+    0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================================
+   QUICK LINKS NAVIGATION
+   ============================================================================ */
+
+.quickLinks {
+  margin-bottom: 2rem;
+}
+
+.linksLabel {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.linksGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.linkCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  transition:
+    transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.linkCard:hover,
+.linkCard:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.linkIcon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(56, 189, 248, 0.15));
+  border-radius: 0.5rem;
+}
+
+.linkIcon svg {
+  width: 18px;
+  height: 18px;
+  color: var(--accent-1);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.linkCard:hover .linkIcon svg {
+  color: var(--text-main);
+}
+
+.linkText {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.linkTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+  transition: color 200ms;
+}
+
+.linkDesc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.linkCard:hover .linkTitle {
+  color: var(--accent-1);
+}
+
+/* ============================================================================
+   DECORATIVE BINARY STREAM
+   ============================================================================ */
+
+.binaryStream {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.7rem;
+  color: rgba(148, 163, 184, 0.25);
+  letter-spacing: 0.2em;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: scroll 20s linear infinite;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .page {
+    padding: 4rem 1rem;
+  }
+
+  .linksGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .linkCard {
+    padding: 0.875rem;
+  }
+
+  .orb1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .orb2 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .orb3 {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION SUPPORT
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .orb1,
+  .orb2,
+  .orb3 {
+    animation: none;
+  }
+
+  .helixRing {
+    animation: none;
+  }
+
+  .errorGlitch {
+    animation: none;
+    display: none;
+  }
+
+  .binaryStream {
+    animation: none;
+  }
+
+  .primaryButton,
+  .linkCard {
+    transition-duration: 0.01ms;
+  }
+}

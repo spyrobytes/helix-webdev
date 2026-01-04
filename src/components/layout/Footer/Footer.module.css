@@ -284,6 +284,13 @@
   color: var(--text-muted);
 }
 
+.responseTime {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
 /* ========================================
    CTA BUTTON
    ======================================== */

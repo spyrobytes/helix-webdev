@@ -56,6 +56,12 @@ export function ContactForm(): React.JSX.Element {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [touched, setTouched] = useState<Set<string>>(new Set());
 
+  // Check if all required fields are filled (for button state)
+  const isFormComplete =
+    formData.name.trim().length >= 2 &&
+    EMAIL_REGEX.test(formData.email.trim()) &&
+    formData.message.trim().length >= 20;
+
   // Client-side validation
   const validateField = (name: keyof FormData, value: string): string | undefined => {
     switch (name) {
@@ -202,19 +208,10 @@ export function ContactForm(): React.JSX.Element {
         </div>
         <h3 className={styles.successTitle}>Message Sent!</h3>
         <p className={styles.successText}>
-          Thank you for reaching out. We&apos;ll review your message and get back to you
-          within one business day.
+          Thank you for reaching out! Please check your email and click the verification
+          link within 24 hours to confirm your message. We&apos;ll review your inquiry
+          and get back to you within one business day.
         </p>
-        <button
-          type="button"
-          className={styles.resetButton}
-          onClick={() => {
-            setStatus('idle');
-            formStartTime.current = Date.now();
-          }}
-        >
-          Send Another Message
-        </button>
       </div>
     );
   }
@@ -359,7 +356,7 @@ export function ContactForm(): React.JSX.Element {
       <button
         type="submit"
         className={styles.submitButton}
-        disabled={status === 'submitting'}
+        disabled={status === 'submitting' || !isFormComplete}
       >
         {status === 'submitting' ? (
           <>

@@ -84,10 +84,8 @@ export function Footer(): React.JSX.Element {
         >
           <h2 className={styles.columnTitle}>Contact</h2>
           <address className={styles.address}>
-            <a href="mailto:hello@helixbytes.com" className={styles.emailLink}>
-              hello@helixbytes.com
-            </a>
             <p className={styles.hours}>Mon–Fri, 9am–6pm (MT)</p>
+            <p className={styles.responseTime}>Typically responding within one business day</p>
           </address>
 
           <Link href="/contact" className={styles.ctaButton}>

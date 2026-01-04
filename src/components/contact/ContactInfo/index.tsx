@@ -59,12 +59,9 @@ export function ContactInfo(): React.JSX.Element {
       </div>
 
       <div className={styles.directContact}>
-        <h3 className={styles.directTitle}>Prefer Email?</h3>
+        <h3 className={styles.directTitle}>Quick Response</h3>
         <p className={styles.directText}>
-          Reach us directly at{' '}
-          <a href="mailto:hello@helixbytes.digital" className={styles.email}>
-            hello@helixbytes.digital
-          </a>
+          Use the form and we&apos;ll get back to you within one business day.
         </p>
       </div>
 

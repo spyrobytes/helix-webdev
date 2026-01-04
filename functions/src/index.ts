@@ -14,6 +14,7 @@ import { onRequest } from "firebase-functions/https";
 import { onSchedule } from "firebase-functions/scheduler";
 import { defineSecret } from "firebase-functions/params";
 import * as admin from "firebase-admin";
+import { Timestamp, FieldValue } from "firebase-admin/firestore";
 import * as crypto from "crypto";
 import Mailgun from "mailgun.js";
 import FormData from "form-data";
@@ -34,6 +35,9 @@ const appCheck = admin.appCheck();
 
 const db = admin.firestore();
 
+// Allow undefined values in Firestore documents (optional fields like company, projectType)
+db.settings({ ignoreUndefinedProperties: true });
+
 // Global options for cost control
 setGlobalOptions({ maxInstances: 10 });
 
@@ -53,7 +57,7 @@ interface ContactFormData {
 
 interface RateLimitDoc {
   count: number;
-  windowStart: admin.firestore.Timestamp;
+  windowStart: Timestamp;
 }
 
 // ============================================================================
@@ -188,7 +192,7 @@ async function verifyAppCheck(
  */
 async function checkRateLimit(ipHash: string): Promise<boolean> {
   const rateLimitRef = db.collection("rateLimits").doc(ipHash);
-  const now = admin.firestore.Timestamp.now();
+  const now = Timestamp.now();
   const windowStart = new Date(
     now.toMillis() - CONFIG.rateLimit.windowMs
   );
@@ -225,7 +229,7 @@ async function checkRateLimit(ipHash: string): Promise<boolean> {
 
       // Increment counter
       transaction.update(rateLimitRef, {
-        count: admin.firestore.FieldValue.increment(1),
+        count: FieldValue.increment(1),
       });
       return true;
     });
@@ -557,7 +561,7 @@ function generateVerificationEmailHtml(
                 If you didn't submit a contact form on our website, you can safely ignore this email.
               </p>
               <p style="margin: 0; font-size: 12px; color: #475569;">
-                Questions? Contact us at <a href="mailto:hello@helixbytes.digital" style="color: #38bdf8; text-decoration: none;">hello@helixbytes.digital</a>
+                Questions? <a href="${appBaseUrl.value()}/contact" style="color: #38bdf8; text-decoration: none;">Visit our contact page</a>
               </p>
             </td>
           </tr>
@@ -586,7 +590,7 @@ function generateVerificationEmailText(
   text += `This link expires in 24 hours.\n\n`;
   text += `${"-".repeat(40)}\n`;
   text += `If you didn't submit a contact form on our website, you can safely ignore this email.\n\n`;
-  text += `Questions? Contact us at hello@helixbytes.digital\n`;
+  text += `Questions? Visit our contact page at ${verificationUrl.split('/api')[0]}/contact\n`;
 
   return text;
 }
@@ -606,7 +610,7 @@ async function sendEmail(data: ContactFormData, submissionId: string): Promise<v
 
   const messageData = {
     from: from,
-    to: ["hello@helixbytes.digital"],
+    to: ["helixbyte.info@gmail.com"],
     subject: `New Contact: ${data.name}${data.company ? ` (${data.company})` : ""}`,
     text: generateEmailText(data, submissionId),
     html: generateEmailHtml(data, submissionId),
@@ -640,7 +644,12 @@ async function sendVerificationEmail(
   const from = mailgunFrom.value();
   const baseUrl = appBaseUrl.value();
 
-  const verificationUrl = `${baseUrl}/api/verify-email?token=${verificationToken}`;
+  // For local development (localhost), link directly to the emulator function
+  // In production, use the Firebase Hosting rewrite path
+  const isLocalDev = baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1');
+  const verificationUrl = isLocalDev
+    ? `http://127.0.0.1:5001/helixbyte-dev/us-central1/verifyEmail?token=${verificationToken}`
+    : `${baseUrl}/api/verify-email?token=${verificationToken}`;
 
   const messageData = {
     from: from,
@@ -721,8 +730,8 @@ export const submitContactForm = onRequest(
 
       // Generate verification token and calculate expiry (24 hours)
       const verificationToken = generateVerificationToken();
-      const now = admin.firestore.Timestamp.now();
-      const expiresAt = admin.firestore.Timestamp.fromDate(
+      const now = Timestamp.now();
+      const expiresAt = Timestamp.fromDate(
         new Date(now.toMillis() + 24 * 60 * 60 * 1000) // 24 hours
       );
 
@@ -821,7 +830,7 @@ export const verifyEmail = onRequest(
       }
 
       // Handle expired token
-      const now = admin.firestore.Timestamp.now();
+      const now = Timestamp.now();
       if (data.verificationTokenExpiresAt.toMillis() < now.toMillis()) {
         console.log("Token expired for submission:", doc.id);
         res.redirect(`${baseUrl}/contact/verified?status=expired`);
@@ -832,9 +841,9 @@ export const verifyEmail = onRequest(
       await doc.ref.update({
         emailVerified: true,
         status: "verified",
-        verifiedAt: admin.firestore.FieldValue.serverTimestamp(),
-        verificationToken: admin.firestore.FieldValue.delete(),
-        verificationTokenExpiresAt: admin.firestore.FieldValue.delete(),
+        verifiedAt: FieldValue.serverTimestamp(),
+        verificationToken: FieldValue.delete(),
+        verificationTokenExpiresAt: FieldValue.delete(),
       });
 
       console.log("Email verified successfully for submission:", doc.id);
@@ -860,7 +869,7 @@ export const cleanupUnverifiedSubmissions = onSchedule(
   async () => {
     try {
       // Calculate cutoff date (7 days ago)
-      const cutoffDate = admin.firestore.Timestamp.fromDate(
+      const cutoffDate = Timestamp.fromDate(
         new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
       );
 
@@ -907,7 +916,7 @@ export const cleanupRateLimits = onSchedule(
   },
   async () => {
     try {
-      const cutoff = admin.firestore.Timestamp.fromDate(
+      const cutoff = Timestamp.fromDate(
         new Date(Date.now() - 24 * 60 * 60 * 1000)
       );
       const snapshot = await db

@@ -82,10 +82,6 @@ export function WhySection(): React.JSX.Element {
                 <StatusDot />
                 Typically responding within one business day.
               </p>
-              <p>
-                Prefer email? Drop us a line at{' '}
-                <strong>hello@helixbytes.digital</strong> (placeholder).
-              </p>
             </div>
           </div>
         </div>

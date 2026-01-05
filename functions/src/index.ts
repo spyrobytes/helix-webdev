@@ -13,6 +13,7 @@ import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import { onSchedule } from "firebase-functions/scheduler";
 import { defineSecret } from "firebase-functions/params";
+import * as logger from "firebase-functions/logger";
 import * as admin from "firebase-admin";
 import { Timestamp, FieldValue } from "firebase-admin/firestore";
 import * as crypto from "crypto";
@@ -112,6 +113,20 @@ function setSecurityHeaders(res: { set: (headers: Record<string, string>) => voi
 // ============================================================================
 
 /**
+ * Extract structured error details for logging
+ * Prevents logging entire error objects which can be large and cause cost amplification
+ */
+function getErrorDetails(err: unknown): Record<string, unknown> {
+  const error = err as Record<string, unknown>;
+  return {
+    message: error?.message || String(err),
+    code: error?.code,
+    status: error?.status || error?.statusCode,
+    name: error?.name,
+  };
+}
+
+/**
  * Validate email format
  */
 function isValidEmail(email: string): boolean {
@@ -174,15 +189,15 @@ async function verifyAppCheck(
 ): Promise<{ valid: boolean; error?: string }> {
   if (!appCheckToken) {
     // Token not provided - allow but log (or reject in strict mode)
-    console.log("App Check token not provided");
+    logger.warn("App Check token not provided");
     return { valid: true }; // Change to false to enforce App Check
   }
 
   try {
     await appCheck.verifyToken(appCheckToken);
     return { valid: true };
-  } catch (error) {
-    console.error("App Check verification failed:", error);
+  } catch (err) {
+    logger.error("App Check verification failed", getErrorDetails(err));
     return { valid: false, error: "App Check verification failed" };
   }
 }
@@ -235,8 +250,11 @@ async function checkRateLimit(ipHash: string): Promise<boolean> {
     });
 
     return result;
-  } catch (error) {
-    console.error("Rate limit check failed:", error);
+  } catch (err) {
+    logger.error("Rate limit check failed", {
+      ...getErrorDetails(err),
+      ipHash,
+    });
     // Fail open to avoid blocking legitimate users
     return true;
   }
@@ -257,7 +275,7 @@ function validateFormData(
   // HONEYPOT CHECK: Reject if 'website' field is filled (bot detection)
   // This field is hidden from real users but visible to bots
   if (formData.website !== undefined && formData.website !== "") {
-    console.log("Honeypot triggered - rejecting bot submission");
+    logger.warn("Honeypot triggered - rejecting bot submission");
     return { valid: false, error: "Invalid submission", isBot: true };
   }
 
@@ -619,10 +637,14 @@ async function sendEmail(data: ContactFormData, submissionId: string): Promise<v
 
   try {
     const result = await mg.messages.create(domain, messageData);
-    console.log("Email sent successfully:", result.id);
-  } catch (error) {
-    console.error("Mailgun error:", error);
-    throw error;
+    logger.info("Team notification email sent", { messageId: result.id, domain });
+  } catch (err) {
+    logger.error("Mailgun error sending team notification", {
+      ...getErrorDetails(err),
+      provider: "mailgun",
+      domain,
+    });
+    throw err;
   }
 }
 
@@ -661,10 +683,15 @@ async function sendVerificationEmail(
 
   try {
     const result = await mg.messages.create(domain, messageData);
-    console.log("Verification email sent successfully:", result.id, "to:", data.email);
-  } catch (error) {
-    console.error("Mailgun verification email error:", error);
-    throw error;
+    logger.info("Verification email sent", { messageId: result.id, domain, recipient: data.email });
+  } catch (err) {
+    logger.error("Mailgun error sending verification email", {
+      ...getErrorDetails(err),
+      provider: "mailgun",
+      domain,
+      recipient: data.email,
+    });
+    throw err;
   }
 }
 
@@ -747,21 +774,28 @@ export const submitContactForm = onRequest(
         verificationTokenExpiresAt: expiresAt,
       });
 
-      console.log("Contact form submission stored:", submissionRef.id);
+      logger.info("Contact form submission stored", { submissionId: submissionRef.id });
 
       // Send team notification email (immediately, as per requirements)
       try {
         await sendEmail(formData, submissionRef.id);
-      } catch (emailError) {
-        console.error("Failed to send team notification email:", emailError);
+      } catch (err) {
+        logger.error("Failed to send team notification email", {
+          ...getErrorDetails(err),
+          submissionId: submissionRef.id,
+        });
         // Don't fail the request if email fails - submission is already stored
       }
 
       // Send verification email to user
       try {
         await sendVerificationEmail(formData, submissionRef.id, verificationToken);
-      } catch (verificationEmailError) {
-        console.error("Failed to send verification email:", verificationEmailError);
+      } catch (err) {
+        logger.error("Failed to send verification email", {
+          ...getErrorDetails(err),
+          submissionId: submissionRef.id,
+          recipient: formData.email,
+        });
         // Don't fail the request if verification email fails - submission is already stored
       }
 
@@ -770,8 +804,8 @@ export const submitContactForm = onRequest(
         message: "Thank you for your message. Please check your email to verify your submission.",
         submissionId: submissionRef.id,
       });
-    } catch (error) {
-      console.error("Contact form error:", error);
+    } catch (err) {
+      logger.error("Contact form submission error", getErrorDetails(err));
       res.status(500).json({
         success: false,
         message: "An error occurred. Please try again later.",
@@ -800,7 +834,7 @@ export const verifyEmail = onRequest(
 
       // Validate token format (64 hex characters)
       if (!token || !/^[a-f0-9]{64}$/i.test(token)) {
-        console.log("Invalid token format received");
+        logger.warn("Invalid verification token format received");
         res.redirect(`${baseUrl}/contact/verified?status=invalid`);
         return;
       }
@@ -814,7 +848,7 @@ export const verifyEmail = onRequest(
 
       // Handle not found (same response as invalid for security)
       if (snapshot.empty) {
-        console.log("Token not found in database");
+        logger.warn("Verification token not found in database");
         res.redirect(`${baseUrl}/contact/verified?status=invalid`);
         return;
       }
@@ -824,7 +858,7 @@ export const verifyEmail = onRequest(
 
       // Handle already verified
       if (data.emailVerified === true) {
-        console.log("Submission already verified:", doc.id);
+        logger.info("Submission already verified", { submissionId: doc.id });
         res.redirect(`${baseUrl}/contact/verified?status=already-verified`);
         return;
       }
@@ -832,7 +866,7 @@ export const verifyEmail = onRequest(
       // Handle expired token
       const now = Timestamp.now();
       if (data.verificationTokenExpiresAt.toMillis() < now.toMillis()) {
-        console.log("Token expired for submission:", doc.id);
+        logger.warn("Verification token expired", { submissionId: doc.id });
         res.redirect(`${baseUrl}/contact/verified?status=expired`);
         return;
       }
@@ -846,10 +880,10 @@ export const verifyEmail = onRequest(
         verificationTokenExpiresAt: FieldValue.delete(),
       });
 
-      console.log("Email verified successfully for submission:", doc.id);
+      logger.info("Email verified successfully", { submissionId: doc.id });
       res.redirect(`${baseUrl}/contact/verified?status=success`);
-    } catch (error) {
-      console.error("Email verification error:", error);
+    } catch (err) {
+      logger.error("Email verification error", getErrorDetails(err));
       const baseUrl = appBaseUrl.value();
       res.redirect(`${baseUrl}/contact/verified?status=invalid`);
     }
@@ -881,7 +915,7 @@ export const cleanupUnverifiedSubmissions = onSchedule(
         .get();
 
       if (snapshot.empty) {
-        console.log("No unverified submissions to clean up");
+        logger.info("Cleanup: No unverified submissions to remove");
         return;
       }
 
@@ -896,10 +930,10 @@ export const cleanupUnverifiedSubmissions = onSchedule(
         await batch.commit();
       }
 
-      console.log(`Cleaned up ${snapshot.size} unverified submissions older than 7 days`);
-    } catch (error) {
-      console.error("Cleanup error:", error);
-      throw error;
+      logger.info("Cleanup: Removed unverified submissions", { count: snapshot.size, olderThanDays: 7 });
+    } catch (err) {
+      logger.error("Cleanup unverified submissions error", getErrorDetails(err));
+      throw err;
     }
   }
 );
@@ -925,17 +959,17 @@ export const cleanupRateLimits = onSchedule(
         .get();
 
       if (snapshot.empty) {
-        console.log("No old rate limit records to clean up");
+        logger.info("Cleanup: No old rate limit records to remove");
         return;
       }
 
       const batch = db.batch();
       snapshot.docs.forEach((doc) => batch.delete(doc.ref));
       await batch.commit();
-      console.log(`Cleaned up ${snapshot.size} old rate limit records`);
-    } catch (error) {
-      console.error("Rate limit cleanup error:", error);
-      throw error;
+      logger.info("Cleanup: Removed old rate limit records", { count: snapshot.size });
+    } catch (err) {
+      logger.error("Rate limit cleanup error", getErrorDetails(err));
+      throw err;
     }
   }
 );

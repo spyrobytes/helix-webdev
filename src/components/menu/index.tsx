@@ -1,6 +1,5 @@
 'use client';
 
-import { useFullscreenMenu } from '@/hooks/useFullscreenMenu';
 import { useScrollAwareness } from '@/hooks/useScrollAwareness';
 import type { MenuItem } from '@/types';
 import { MenuToggle } from './MenuToggle';
@@ -11,10 +10,12 @@ import styles from './Menu.module.css';
 interface FullscreenMenuProps {
   items: readonly MenuItem[];
   scrollThreshold?: number;
+  isOpen: boolean;
+  toggle: () => void;
+  close: () => void;
 }
 
-export function FullscreenMenu({ items, scrollThreshold = 100 }: FullscreenMenuProps): React.JSX.Element {
-  const { isOpen, toggle, close } = useFullscreenMenu();
+export function FullscreenMenu({ items, scrollThreshold = 100, isOpen, toggle, close }: FullscreenMenuProps): React.JSX.Element {
   const isScrolled = useScrollAwareness(scrollThreshold);
 
   const menuClasses = [

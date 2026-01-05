@@ -46,7 +46,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.4s ease-out 0.2s;
   z-index: var(--z-menu-cta);
 }
 
@@ -54,6 +58,14 @@
   transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.8);
   border-color: var(--accent-1);
+}
+
+/* Hide CTA when fullscreen menu is open */
+.ctaHidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
 }
 
 .navCta span {

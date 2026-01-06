@@ -1,0 +1,152 @@
+/* ============================================================================
+   LEGAL CONTENT - TYPOGRAPHY FOR LEGAL PAGES
+   Consistent with PostContent styling for brand cohesion
+   ============================================================================ */
+
+.content {
+  max-width: 48rem;
+  margin: 0 auto;
+  color: var(--text-main);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* ============================================================================
+   HEADINGS
+   ============================================================================ */
+
+.content h1,
+.content h2,
+.content h3,
+.content h4 {
+  color: var(--text-main);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.content h1 {
+  font-size: clamp(1.6rem, 3.5vw, 2rem);
+  letter-spacing: -0.02em;
+}
+
+.content h2 {
+  font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+  letter-spacing: -0.01em;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.content h3 {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  color: var(--accent-1);
+}
+
+.content h4 {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+/* First heading shouldn't have top margin */
+.content > h1:first-child,
+.content > h2:first-child {
+  margin-top: 0;
+}
+
+/* ============================================================================
+   PARAGRAPH
+   ============================================================================ */
+
+.content p {
+  margin-bottom: 1.25rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================================
+   LISTS
+   ============================================================================ */
+
+.content ul,
+.content ol {
+  margin: 1.25rem 0;
+  padding-left: 1.5rem;
+  color: var(--text-muted);
+}
+
+.content ol {
+  list-style-type: decimal;
+}
+
+.content li {
+  margin-bottom: 0.4rem;
+  padding-left: 0.5rem;
+}
+
+.content li::marker {
+  color: var(--accent-1);
+}
+
+/* Nested lists */
+.content ul ul,
+.content ol ol,
+.content ul ol,
+.content ol ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================================================
+   INLINE ELEMENTS
+   ============================================================================ */
+
+.content strong {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.content em {
+  font-style: italic;
+}
+
+.content a {
+  color: var(--accent-1);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.content a:hover {
+  color: var(--accent-2);
+}
+
+.content a:focus-visible {
+  outline: 2px solid var(--accent-1);
+  outline-offset: 2px;
+  border-radius: 0.125rem;
+}
+
+/* ============================================================================
+   HORIZONTAL RULES
+   ============================================================================ */
+
+.content hr {
+  border: none;
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 2rem 0;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 767px) {
+  .content {
+    font-size: 0.95rem;
+  }
+
+  .content h2 {
+    margin-top: 2rem;
+  }
+}

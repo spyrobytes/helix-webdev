@@ -168,15 +168,15 @@ export function Footer(): React.JSX.Element {
         </p>
 
         <div className={styles.bottomLinks}>
-          <a href="/privacy" className={styles.bottomLink}>
+          <Link href="/privacy" className={styles.bottomLink}>
             Privacy Policy
-          </a>
+          </Link>
           <span className={styles.bottomSeparator} aria-hidden="true">
             ·
           </span>
-          <a href="/terms" className={styles.bottomLink}>
+          <Link href="/terms" className={styles.bottomLink}>
             Terms of Service
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

@@ -6,7 +6,11 @@ import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch with Helixbytes. Tell us about your project and we\'ll respond within one business day.',
+  description:
+    "Get in touch with Helixbytes. Tell us about your project and we'll respond within one business day.",
+  alternates: {
+    canonical: '/contact',
+  },
 };
 
 export default function ContactPage(): React.JSX.Element {

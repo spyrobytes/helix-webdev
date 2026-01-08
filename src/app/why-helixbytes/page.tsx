@@ -8,7 +8,11 @@ import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Why Helixbytes',
-  description: 'Discover why organizations choose Helixbytes: unified expertise, AI-native solutions, security-first approach, and a true partnership model.',
+  description:
+    'Why organizations choose Helixbytes: unified full-stack expertise, AI-native solutions, security-first development, and a true partnership approach.',
+  alternates: {
+    canonical: '/why-helixbytes',
+  },
 };
 
 export default function WhyHelixbytesPage(): React.JSX.Element {

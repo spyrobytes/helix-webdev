@@ -49,6 +49,9 @@ export async function generateMetadata({
           images: [{ url: getBlogImageUrl(post.mainImage, 1200) }],
         }
       : undefined,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
   };
 }
 
@@ -79,9 +82,43 @@ export default async function PostPage({
     ? getBlogImageUrl(post.mainImage, 1200)
     : null;
 
+  // BlogPosting structured data for rich results
+  const blogPostSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt || `Read ${post.title} on the Helixbytes blog.`,
+    image: heroImageUrl || undefined,
+    datePublished: post.publishedAt,
+    author: {
+      '@type': post.author ? 'Person' : 'Organization',
+      name: post.author?.name || 'Helixbytes Digital Solutions',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Helixbytes Digital Solutions',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://helixbytes.com/images/hlx-logo-optimized.svg',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://helixbytes.com/blog/${slug}`,
+    },
+    url: `https://helixbytes.com/blog/${slug}`,
+  };
+
   return (
-    <div className={styles.page}>
-      <nav className={styles.nav} aria-label="Breadcrumb">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(blogPostSchema),
+        }}
+      />
+      <div className={styles.page}>
+        <nav className={styles.nav} aria-label="Breadcrumb">
         <Link href="/blog" className={styles.backLink}>
           <svg
             width="16"
@@ -143,6 +180,7 @@ export default async function PostPage({
           <p className={styles.noContent}>This post has no content yet.</p>
         )}
       </article>
-    </div>
+      </div>
+    </>
   );
 }

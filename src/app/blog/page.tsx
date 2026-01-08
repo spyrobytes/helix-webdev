@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: 'Blog',
   description:
     'Insights on software engineering, AI integration, and digital transformation from the Helixbytes team.',
+  alternates: {
+    canonical: '/blog',
+  },
 };
 
 async function getPosts(): Promise<PostSummary[]> {

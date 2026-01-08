@@ -7,7 +7,11 @@ import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Our Approach',
-  description: 'How Helixbytes thinks and delivers: our process, philosophy, and commitment to engineering excellence.',
+  description:
+    'How Helixbytes delivers results: our agile process, engineering philosophy, and commitment to building reliable, scalable software solutions.',
+  alternates: {
+    canonical: '/approach',
+  },
 };
 
 export default function ApproachPage(): React.JSX.Element {

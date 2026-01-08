@@ -5,7 +5,11 @@ import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'Helixbytes Digital Solutions Privacy Policy - How we collect, use, and protect your information.',
+  description:
+    'Helixbytes Digital Solutions Privacy Policy - How we collect, use, and protect your information.',
+  alternates: {
+    canonical: '/privacy',
+  },
 };
 
 export default function PrivacyPolicyPage(): React.JSX.Element {

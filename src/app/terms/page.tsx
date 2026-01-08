@@ -5,7 +5,11 @@ import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'Helixbytes Digital Solutions Terms of Service - Terms and conditions governing the use of our services.',
+  description:
+    'Helixbytes Digital Solutions Terms of Service - Terms and conditions governing the use of our services.',
+  alternates: {
+    canonical: '/terms',
+  },
 };
 
 export default function TermsOfServicePage(): React.JSX.Element {

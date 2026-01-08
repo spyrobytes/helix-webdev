@@ -5,6 +5,9 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
 
+// Note: Metadata must be in a separate file for 'use client' pages
+// robots: noindex is handled via robots.ts disallow rule
+
 type VerificationStatus = 'success' | 'already-verified' | 'expired' | 'invalid' | 'loading';
 
 function SuccessCard(): React.JSX.Element {
